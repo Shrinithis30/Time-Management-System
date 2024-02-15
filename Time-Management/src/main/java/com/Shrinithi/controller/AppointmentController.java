@@ -1,6 +1,5 @@
 package com.Shrinithi.controller;
 
-
 import com.Shrinithi.Entity.Appointment;
 import com.Shrinithi.Request.AppointmentRequest;
 import com.Shrinithi.service.AppointmentService;
@@ -20,8 +19,8 @@ public class AppointmentController {
     private AppointmentService appointmentService;
 
     @PostMapping("/appointment")
-    public ResponseEntity<Object> saveAppointment(@RequestBody AppointmentRequest appointmentRequest) {
-        if (appointmentRequest == null) {
+    public ResponseEntity<Object> bookAppointment(@RequestBody AppointmentRequest appointmentRequest){
+        if(appointmentRequest == null){
             throw new RuntimeException("appointment request cannot be null");
         }
         Appointment appointment = appointmentService.saveAppointmentRequest(appointmentRequest);
@@ -29,8 +28,20 @@ public class AppointmentController {
     }
 
     @GetMapping("/appointments")
-    public List<Appointment> getAllAppointments() {
+    public List<Appointment> getAllAppointments(){
         return appointmentService.getAllAppointments();
     }
-}
 
+    @PutMapping("/appointment")
+    public ResponseEntity<Object> updateAppointmentThatPersonConsulted(@RequestParam("appointmentId") String appointmentId){
+        return appointmentService.updateAppointment(appointmentId);
+    }
+
+    @DeleteMapping("/appointment")
+    public ResponseEntity<Object> deleteAppointment(@RequestParam("appointmentId") String appointmentId){
+        return appointmentService.deleteAppointment(appointmentId);
+    }
+
+
+
+}

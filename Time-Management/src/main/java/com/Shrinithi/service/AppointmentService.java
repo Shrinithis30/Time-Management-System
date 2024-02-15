@@ -4,6 +4,8 @@ import com.Shrinithi.Entity.Appointment;
 import com.Shrinithi.Repository.AppointmentRepository;
 import com.Shrinithi.Request.AppointmentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,5 +36,32 @@ public class AppointmentService {
 
     public List<Appointment> getAllAppointments(){
         return appointmentRepository.findAll();
+    }
+
+    public ResponseEntity<Object> updateAppointment(String appointmentId) {
+
+        /* Get appointment data for given appointmentId */
+        Appointment appointmentForUpdating = appointmentRepository.findByAppointmentId(appointmentId);
+        if(appointmentForUpdating == null ){
+            return new ResponseEntity<>("Appointment not found!", HttpStatus.NOT_FOUND);
+        }
+        /* change value to true  */
+        appointmentForUpdating.setConsulted(true);
+        /* save the row to table */
+        appointmentRepository.save(appointmentForUpdating);
+        return new ResponseEntity<>("Appointment updated successfully!", HttpStatus.OK);
+    }
+
+    public ResponseEntity<Object> deleteAppointment(String appointmentId) {
+
+        /* Get appointment data for given appointmentId */
+        Appointment appointmentForDeleting = appointmentRepository.findByAppointmentId(appointmentId);
+        if(appointmentForDeleting == null ){
+            return new ResponseEntity<>("Appointment not found!", HttpStatus.NOT_FOUND);
+        }
+
+        appointmentRepository.deleteByAppointmentId(appointmentId);
+
+        return new ResponseEntity<>("Appointment deleted successfully!", HttpStatus.OK);
     }
 }
